@@ -4,14 +4,15 @@ A set of routines to read and manipulate LIGGGHTS output files
 """
 
 import pandas as pd
-import os
 
-local_cols = ['pos1_x', 'pos1_y', 'pos1_z', 'pos2_x', 'pos2_y', 'pos2_z',
+local_cols = [
+    'pos1_x', 'pos1_y', 'pos1_z', 'pos2_x', 'pos2_y', 'pos2_z',
     'vel_x', 'vel_y', 'vel_z',
     'id_1', 'id_2', 'periodic',
     'f_x', 'f_y', 'f_z',
     'f_normal', 'f_tangential',
-     'torque', 'history', 'contactArea', 'heatFlux', 'contactPointq']
+    'torque', 'history', 'contactArea', 'heatFlux', 'contactPointq']
+
 
 def read_local(filename, cols=local_cols):
     """Reads an ASCII LIGGGHTS dump file produced from a computer/gran/local And
@@ -38,7 +39,7 @@ def read_local(filename, cols=local_cols):
         return None
 
     f.close()
-    data = pd.read_table(filename, skiprows=skiplines, delim_whitespace=True, header=None )
+    data = pd.read_table(filename, skiprows=skiplines, delim_whitespace=True, header=None)
 
     if len(data.columns) != len(cols):
         print('Warning: %d columns read from file and %d specified. Not labelling!' % (len(data.columns), len(cols)))
@@ -64,7 +65,7 @@ def read_dump(filename):
     start = 'ITEM: ATOMS'
     time = 'ITEM: TIMESTEP'
 
-    lines = f.readlines() # all in one go
+    lines = f.readlines()  # all in one go
 
     for idx, line in enumerate(lines):
         if line.startswith(time):
@@ -81,8 +82,8 @@ def read_dump(filename):
 
     data = []
     for idx, skip in enumerate(skiplines):
-        nrows = skiplines[idx+1]-skiplines[idx] if idx<(len(skiplines)-1) else len(lines)-skip
-        data.append(pd.read_table(filename, skiprows=skip, delim_whitespace=True, header=None, names=cols, nrows=nrows ))
+        nrows = skiplines[idx + 1] - skiplines[idx] if idx < (len(skiplines) - 1) else len(lines) - skip
+        data.append(pd.read_table(filename, skiprows=skip, delim_whitespace=True, header=None, names=cols, nrows=nrows))
     # use nrows to get each timestep
 
     return timesteps, data
