@@ -120,11 +120,11 @@ def read_vtk(filename):
 
     flatten = lambda l: [item for sublist in l for item in sublist]
 
-    import pyvtk
+    import pyevtk
     import pandas as pd
     import numpy as np
 
-    data = pyvtk.VtkData(filename)
+    data = pyevtk.VtkData(filename)
     coords = np.array(data.structure.points)
     field = data.point_data.data[0]
     cols = field.data.keys()
